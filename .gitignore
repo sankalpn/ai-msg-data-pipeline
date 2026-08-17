@@ -22,3 +22,7 @@ buildNumber.properties
 .DS_Store
 *.log
 .env
+
+# Runtime logs
+logs/
+pipeline-service/logs/

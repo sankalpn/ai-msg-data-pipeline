@@ -49,7 +49,18 @@ Reconciliation and deduplication across requests are intentionally not implement
 ```bash
 mvn clean verify
 LOG_SERVICE_BASE_URL=http://localhost:8081 mvn -pl pipeline-service spring-boot:run
+SPRING_PROFILES_ACTIVE=dev LOG_SERVICE_BASE_URL=http://localhost:8081 mvn -pl pipeline-service spring-boot:run
 ```
+
+A non-secret development environment file is available at `pipeline-service/src/test/resources/env/dev.env`.
+
+### Run from IntelliJ IDEA
+
+1. Open **Run → Edit Configurations**.
+2. Add a **Spring Boot** configuration.
+3. Select `com.acuvity.pipeline.DataPipelineApplication` as the main class and `pipeline-service` as the module.
+4. In **Environment variables**, choose **Load variables from file** and select `pipeline-service/src/test/resources/env/dev.env`.
+5. Run the configuration. The environment file activates the `dev` profile and supplies the local service settings.
 
 ## TODO
 
@@ -68,7 +79,10 @@ Important environment variables:
 | `PIPELINE_SERVICE_BASE_URL` | `http://localhost:8080` |
 | `ENABLED_NAMESPACES` | empty comma-separated list |
 | `PUBLISH_TIMEOUT` | `10s` |
+| `LOG_FILE` | `logs/pipeline-service.log` |
 
 API authentication is intentionally outside this service and is expected to be enforced by the API gateway.
 
 Topic creation/retention is infrastructure-owned. Create `alerts.enriched.v1` and `logs.synced.v1` with the architecture's initial seven-day retention before production deployment.
+
+The default Log4j2 configuration writes to `LOG_FILE`. The file rolls at 10 MB, compressed archives include the date and index, and the latest 10 archives are retained. The `dev` Spring profile selects `log4j2-dev.xml` and writes to the console instead; activate it with `SPRING_PROFILES_ACTIVE=dev`. Both formats prefix each line with the MDC `traceId` and `spanId`; the values are blank when no tracing context is active.

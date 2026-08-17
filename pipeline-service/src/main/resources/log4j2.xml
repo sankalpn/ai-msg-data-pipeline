@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Properties>
+        <Property name="LOG_PATTERN">%d{yyyy-MM-dd'T'HH:mm:ss.SSSXXX} %-5level [traceId=%X{traceId} spanId=%X{spanId}] [%t] %logger{36} - %msg%n</Property>
+        <Property name="FILE_PATH">${env:LOG_FILE:-logs/pipeline-service.log}</Property>
+    </Properties>
+
+    <Appenders>
+        <RollingFile name="RollingFile"
+                     fileName="${FILE_PATH}"
+                     filePattern="${FILE_PATH}.%d{yyyy-MM-dd}.%i.gz">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="10 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <Root level="INFO">
+            <AppenderRef ref="RollingFile"/>
+        </Root>
+    </Loggers>
+</Configuration>
