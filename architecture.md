@@ -197,11 +197,13 @@ sequenceDiagram
 
 ## 9. Security & Multi-Tenancy
 
-- `POST /v1/alerts`, `POST /v1/sync-logs`, and the future `POST /v1/scheduler/reconcile` are namespace-scoped, authenticated via a namespace-bound API key or mTLS certificate.
-- `POST /v1/scheduler/sync-logs` is not namespace-scoped, since it triggers work across every configured namespace at once. It needs a broader, service-level credential rather than a namespace-bound one, and should be reachable only by the external scheduler, not by arbitrary namespace-scoped callers.
-- A request for a namespace not in the configured list (Section 6) is rejected, so tenant isolation also means the pipeline simply doesn't run for organizations that haven't been explicitly enabled.
+- Every API this service exposes, `POST /v1/alerts`, `POST /v1/sync-logs`, `POST /v1/scheduler/sync-logs`, and the future `POST /v1/scheduler/reconcile`, is called service-to-service only. No end-user login context ever reaches this service.
+- Authentication and authorization happen at the API gateway in front of the service, not inside the service itself. The gateway terminates mTLS and decides which caller may hit which endpoint for which namespace, before the request ever reaches this service.
+- Since there's no user identity involved anywhere in this flow, the credential is an mTLS client certificate, not an API key. An API key implies a user or account context that doesn't exist here.
+- `POST /v1/alerts` and `POST /v1/sync-logs` are namespace-scoped: each caller's certificate maps to the one namespace it's authorized to act on. `POST /v1/scheduler/sync-logs` and the future `POST /v1/scheduler/reconcile` are not namespace-scoped, since they trigger work across every configured namespace at once, and are only reachable by the external scheduler's own certificate, not by any namespace-scoped caller.
+- Separately from gateway-level auth, the service itself still rejects a request for a namespace not in the configured list (Section 6), a valid, authenticated caller for a namespace that simply isn't enabled for the pipeline is still turned away.
 - RedPanda's `alerts.enriched.v1` and `logs.synced.v1` topics are both partitioned by `namespace` (Section 7), which doubles as a tenant-isolation and per-tenant scaling boundary for whatever consumes them later.
-- TLS in transit is assumed for all REST and RedPanda traffic.
+- TLS is assumed for the service's connection to RedPanda as well, separate from the mTLS the gateway enforces on inbound REST calls.
 
 ## 10. Future Work
 

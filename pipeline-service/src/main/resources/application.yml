@@ -1,0 +1,34 @@
+spring:
+  application:
+    name: ai-msg-data-pipeline
+  kafka:
+    bootstrap-servers: ${REDPANDA_BOOTSTRAP_SERVERS:localhost:9092}
+    producer:
+      acks: all
+      properties:
+        enable.idempotence: true
+        delivery.timeout.ms: 10000
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JacksonJsonSerializer
+
+pipeline:
+  service-base-url: ${PIPELINE_SERVICE_BASE_URL:http://localhost:8080}
+  enabled-namespaces: ${ENABLED_NAMESPACES:}
+  log-service:
+    base-url: ${LOG_SERVICE_BASE_URL:http://localhost:8081}
+    correlation-tolerance: ${CORRELATION_TOLERANCE:30s}
+    connect-timeout: ${LOG_SERVICE_CONNECT_TIMEOUT:2s}
+    request-timeout: ${LOG_SERVICE_REQUEST_TIMEOUT:10s}
+  topics:
+    enriched-alerts: ${ENRICHED_ALERTS_TOPIC:alerts.enriched.v1}
+    synced-logs: ${SYNCED_LOGS_TOPIC:logs.synced.v1}
+  publish-timeout: ${PUBLISH_TIMEOUT:10s}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
