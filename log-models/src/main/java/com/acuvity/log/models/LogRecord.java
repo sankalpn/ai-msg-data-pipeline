@@ -7,6 +7,7 @@ public record LogRecord(
         List<LogAlert> alerts,
         String decision,
         List<Extraction> extractions,
+        String namespace,
         Principal principal,
         String provider,
         String providerType,

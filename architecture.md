@@ -291,6 +291,7 @@ Response is a wrapped object, not a bare array, so the shape can gain new top-le
   ]
 }
 ```
+Note that per user for this API could be added later if the alerts are confirmed to be per user.
 
 ### RedPanda message schema, topic `alerts.enriched.v1`
 ```json

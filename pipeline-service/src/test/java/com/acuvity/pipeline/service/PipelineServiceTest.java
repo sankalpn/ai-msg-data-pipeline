@@ -89,7 +89,7 @@ class PipelineServiceTest {
         var logPrincipal = new com.acuvity.log.models.Principal(
                 "24.5.75.234", "UserToken", List.of("Sales"), "User",
                 new com.acuvity.log.models.User("john@example.com"));
-        var log = new LogRecord(List.of(), "Deny", List.of(), logPrincipal, "chatgpt", "LLM",
+        var log = new LogRecord(List.of(), "Deny", List.of(), "/org/test", logPrincipal, "chatgpt", "LLM",
                 List.of(), null, Instant.parse("2025-09-30T13:48:00Z"), "Input");
         when(client.findLogs("/org/test", "chatgpt", "john@example.com", "secrets",
                 start.minusSeconds(30), end.plusSeconds(30)))
@@ -109,7 +109,7 @@ class PipelineServiceTest {
     void syncPublishesEveryLogUsingNamespaceAsKey() {
         Instant from = Instant.parse("2025-09-30T13:00:00Z");
         Instant to = Instant.parse("2025-09-30T14:00:00Z");
-        var log = new LogRecord(List.of(), "Allow", List.of(), null, "chatgpt", "LLM",
+        var log = new LogRecord(List.of(), "Allow", List.of(), "/org/test", null, "chatgpt", "LLM",
                 List.of(), null, from, "Input");
         when(client.findLogs("/org/test", null, null, null, from, to))
                 .thenReturn(Mono.just(new LogRecords(List.of(log))));

@@ -1,0 +1,40 @@
+{
+  "ID": "68dbdf7181fbcb00012b3ec3",
+  "alertDefinition": {
+    "ID": "672e84970cee63000115ab5a",
+    "cooldown": "5m",
+    "createTime": "2024-11-08T21:37:27.641Z",
+    "description": "Alerting configuration for secrets.",
+    "friendlyName": "Secrets",
+    "message": "Some secrets have been detected in the input data.",
+    "name": "secrets",
+    "namespace": "/org/test",
+    "propagate": true,
+    "severity": "Critical",
+    "updateTime": "2024-11-08T21:37:27.641Z"
+  },
+  "alertDefinitionName": "secrets",
+  "alertEvents": [
+    {
+      "alertDefinition": "secrets",
+      "alertDefinitionNamespace": "/org/test",
+      "principal": {
+        "IP": "24.5.75.234",
+        "authType": "UserToken",
+        "teams": ["Sales"],
+        "type": "User",
+        "user": {
+          "name": "john@proofpoint.com"
+        }
+      },
+      "provider": "chatgpt",
+      "timestamp": "2025-09-30T13:49:15.942Z"
+    }
+  ],
+  "counter": 1,
+  "createTime": "2025-09-30T13:47:29.471Z",
+  "namespace": "/org/test",
+  "start": "2025-09-30T13:47:29.444Z",
+  "end": "2025-09-30T13:49:15.942Z",
+  "updateTime": "2025-09-30T13:49:15.978Z"
+}

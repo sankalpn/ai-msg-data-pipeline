@@ -1,0 +1,184 @@
+{
+  "logs": [
+    {
+      "alerts": [],
+      "decision": "Allow",
+      "extractions": [],
+      "namespace": "/org/test",
+      "principal": {
+        "IP": "127.0.0.1",
+        "authType": "UserToken",
+        "teams": ["Engineering"],
+        "type": "User",
+        "user": {
+          "name": "john@example.com"
+        }
+      },
+      "provider": "chatgpt",
+      "providerType": "LLM",
+      "reasons": [],
+      "summary": null,
+      "time": "2025-09-30T13:48:00Z",
+      "type": "Input"
+    },
+    {
+      "alerts": [
+        {
+          "alertDefinition": "secrets",
+          "alertDefinitionNamespace": "/org/test",
+          "provider": "chatgpt"
+        }
+      ],
+      "decision": "Deny",
+      "extractions": [
+        {
+          "secrets": {
+            "aws-secret-key": 0.96,
+            "credentials": 0.88
+          },
+          "data": "An uploaded spreadsheet contained credentials.",
+          "detections": [
+            {
+              "name": "aws-secret-key",
+              "type": "secrets"
+            },
+            {
+              "name": "credentials",
+              "type": "secrets"
+            }
+          ],
+          "isFile": true,
+          "kind": "Message",
+          "modalities": [
+            {
+              "group": "document",
+              "type": "xlsx"
+            }
+          ],
+          "role": "User"
+        }
+      ],
+      "namespace": "/org/test",
+      "principal": {
+        "IP": "192.0.2.10",
+        "authType": "UserToken",
+        "teams": ["Sales"],
+        "type": "User",
+        "user": {
+          "name": "alice@example.com"
+        }
+      },
+      "provider": "chatgpt",
+      "providerType": "LLM",
+      "reasons": ["Secrets detected in a file that cannot be redacted."],
+      "summary": {
+        "detections": {
+          "secrets": {
+            "n": 2
+          }
+        },
+        "modalities": {
+          "document": {
+            "n": 1
+          },
+          "document/xlsx": {
+            "n": 1
+          }
+        }
+      },
+      "time": "2025-09-30T13:49:15Z",
+      "type": "Input"
+    },
+    {
+      "alerts": [],
+      "decision": "Allow",
+      "extractions": [],
+      "namespace": "/org/test",
+      "principal": {
+        "IP": "192.0.2.11",
+        "authType": "ServiceToken",
+        "teams": ["Platform"],
+        "type": "Service",
+        "user": {
+          "name": "build-agent@example.com"
+        }
+      },
+      "provider": "claude",
+      "providerType": "LLM",
+      "reasons": [],
+      "summary": null,
+      "time": "2025-09-30T13:52:30Z",
+      "type": "Output"
+    },
+    {
+      "alerts": [
+        {
+          "alertDefinition": "pii",
+          "alertDefinitionNamespace": "/org/test",
+          "provider": "gemini"
+        }
+      ],
+      "decision": "Deny",
+      "extractions": [
+        {
+          "secrets": {},
+          "data": "A message contained a social security number.",
+          "detections": [
+            {
+              "name": "us-social-security-number",
+              "type": "pii"
+            }
+          ],
+          "isFile": false,
+          "kind": "Message",
+          "modalities": [],
+          "role": "User"
+        }
+      ],
+      "namespace": "/org/test",
+      "principal": {
+        "IP": "198.51.100.25",
+        "authType": "UserToken",
+        "teams": ["Support"],
+        "type": "User",
+        "user": {
+          "name": "maya@example.com"
+        }
+      },
+      "provider": "gemini",
+      "providerType": "LLM",
+      "reasons": ["Personally identifiable information detected."],
+      "summary": {
+        "detections": {
+          "pii": {
+            "n": 1
+          }
+        },
+        "modalities": {}
+      },
+      "time": "2025-09-30T13:55:45Z",
+      "type": "Input"
+    },
+    {
+      "alerts": [],
+      "decision": "Allow",
+      "extractions": [],
+      "namespace": "/org/test",
+      "principal": {
+        "IP": "203.0.113.7",
+        "authType": "UserToken",
+        "teams": ["Engineering", "AI Research"],
+        "type": "User",
+        "user": {
+          "name": "sam@example.com"
+        }
+      },
+      "provider": "copilot",
+      "providerType": "LLM",
+      "reasons": [],
+      "summary": null,
+      "time": "2025-09-30T14:01:10Z",
+      "type": "Input"
+    }
+  ]
+}

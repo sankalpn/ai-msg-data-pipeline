@@ -1,0 +1,25 @@
+@baseUrl = http://localhost:8082
+
+### Reject an alert for a disabled namespace
+POST {{baseUrl}}/v1/alerts
+Content-Type: application/json
+
+< ./alerts/disabled-namespace.json
+
+> {%
+    client.test("Disabled namespace returns 403", function () {
+        client.assert(response.status === 403, "Expected 403 but received " + response.status);
+    });
+%}
+
+### Accept an alert for the enabled dev namespace
+POST {{baseUrl}}/v1/alerts
+Content-Type: application/json
+
+< ./alerts/enabled-namespace.json
+
+> {%
+    client.test("Enabled namespace returns 202", function () {
+        client.assert(response.status === 202, "Expected 202 but received " + response.status);
+    });
+%}

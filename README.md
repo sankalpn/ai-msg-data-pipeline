@@ -60,7 +60,7 @@ A non-secret development environment file is available at `pipeline-service/src/
 2. Add a **Spring Boot** configuration.
 3. Select `com.acuvity.pipeline.DataPipelineApplication` as the main class and `pipeline-service` as the module.
 4. In **Environment variables**, choose **Load variables from file** and select `pipeline-service/src/test/resources/env/dev.env`.
-5. Run the configuration. The environment file activates the `dev` profile and supplies the local service settings.
+5. Run the configuration. The environment file activates the Spring `dev` profile and supplies the local service settings. Spring starts WireMock on port `8081` with the application and stops it during application shutdown. The mock response is stored in `pipeline-service/src/main/resources/wiremock/__files/logs-response.json`.
 
 ## TODO
 
@@ -72,6 +72,9 @@ Important environment variables:
 | Variable | Default |
 |---|---|
 | `REDPANDA_BOOTSTRAP_SERVERS` | `localhost:9092` |
+| `KAFKA_DELIVERY_TIMEOUT_MS` | `10000` |
+| `KAFKA_REQUEST_TIMEOUT_MS` | `5000` |
+| `KAFKA_LINGER_MS` | `0` |
 | `LOG_SERVICE_BASE_URL` | `http://localhost:8081` |
 | `CORRELATION_TOLERANCE` | `30s` |
 | `LOG_SERVICE_CONNECT_TIMEOUT` | `2s` |
